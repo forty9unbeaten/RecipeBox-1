@@ -2,7 +2,11 @@
 <p>{{data.time_required}}</p>
 <br/>
 <h3>Description</h3>
-<div>{{data.description}}</div>
+    {% for line in description%}
+        <p>{{line}}</p>
+    {% endfor %}
 <h3>Instructions</h3>
-<p>{{data.instructions}}</p>
+    {% for line in instructions %}
+        <p>{{line}}</p>
+    {% endfor %}
 <a href="/">Home</a>
