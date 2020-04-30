@@ -1,0 +1,8 @@
+<h1>Welcome to Recipe Box</h1>
+
+<h3>Recipes</h3>
+<ul>
+    {% for Recipe in data %}
+        <li><a href="/recipe/{{Recipe.id}}">{{ Recipe.title }}</a> | by <a href="/author/{{Recipe.author.id}}">{{ Recipe.author.name }}</a></li>
+    {% endfor %}
+</ul>

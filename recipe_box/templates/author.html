@@ -1,0 +1,12 @@
+<h1>{{author.name}}</h1>
+<p>A Recipe Box Author</p>
+
+<h3>Bio</h3>
+<p>{{author.bio}}</p>
+<h3>Recipes</h3>
+<ul>
+{% for recipe in recipes%}
+    <li><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a> | {{recipe.time_required}}</li>
+{% endfor %}
+</ul>
+<a href="/">Home</a>
