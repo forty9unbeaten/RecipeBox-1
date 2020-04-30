@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 """Django's command-line utility for administrative tasks."""
+"""Worked with Detrich just to bounce ideas off of eachother"""
 import os
 import sys
 
