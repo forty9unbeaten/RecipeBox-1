@@ -43,7 +43,8 @@ def author(request, id=0):
     recipe_query = Recipe.objects.filter(author=id)
     return render(request, 'author.html', {
             "author": author_query,
-            "recipes": recipe_query
+            "recipes": recipe_query,
+            "home": reverse('homepage')
         })
 
 
@@ -54,7 +55,8 @@ def recipe(request, id=0):
     return render(request, 'recipe.html', {
             'data': query,
             "description": description,
-            "instructions": instructions
+            "instructions": instructions,
+            "home": reverse('homepage')
         })
 
 
@@ -79,12 +81,18 @@ def add_author(request):
                 return HttpResponseRedirect(reverse("homepage"))
         else:
             form = AuthorAddForm()
-            return render(request, html, {"form": form})
+            return render(request, html, {
+                "form": form,
+                "home": reverse('homepage')
+            })
     html = "error.html"
     return render(
         request,
         html,
-        {"error": "You cannot create an author without a staff account."}
+        {
+            "error": "You cannot create an author without a staff account.",
+            "home": reverse('homepage')
+        }
     )
 
 
@@ -106,4 +114,5 @@ def add_recipe(request):
             return HttpResponseRedirect(reverse("homepage"))
     else:
         form = RecipeAddForm()
-        return render(request, html, {"form": form})
+        return render(request, html, {
+            "form": form, "home": reverse('homepage')})
