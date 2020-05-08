@@ -114,5 +114,11 @@ def add_recipe(request):
             return HttpResponseRedirect(reverse("homepage"))
     else:
         form = RecipeAddForm()
+        # This should not be this easy
+        # I spent longer than I'd like to admit trying to do this
+        # in the form class
+        if not request.user.is_staff:
+            form.fields['author'].queryset = Author.objects.filter(
+                name=request.user.author.name)
         return render(request, html, {
             "form": form, "home": reverse('homepage')})
