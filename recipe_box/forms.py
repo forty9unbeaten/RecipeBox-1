@@ -2,9 +2,16 @@ from django import forms
 from recipe_box.models import Author
 
 
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+
 class AuthorAddForm(forms.Form):
     name = forms.CharField(max_length=50)
     bio = forms.CharField(widget=forms.Textarea)
+    username = forms.CharField(max_length=50)
+    password = forms.CharField(max_length=50)
 
 
 class RecipeAddForm(forms.Form):
