@@ -3,10 +3,26 @@
 
 <h3>Bio</h3>
 <p>{{author.bio}}</p>
+
 <h3>Recipes</h3>
 <ul>
-{% for recipe in recipes%}
-    <li><a href="/recipe/{{recipe.id}}">{{recipe.title}}</a> | {{recipe.time_required}}</li>
-{% endfor %}
+    {% for recipe in recipes%}
+    <li>
+        <a href="/recipe/{{recipe.id}}">{{recipe.title}}</a> |
+        {{recipe.time_required}}
+    </li>
+    {% endfor %}
 </ul>
+
+<h3>Favorites</h3>
+<ul>
+    {% for fav in favorites %}
+        <li>
+            <a href={% url 'recipe_detail' fav.id %}>
+                {{ fav.title }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>
+
 <a href="{{ home }}">Home</a>
