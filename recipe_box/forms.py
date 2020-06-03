@@ -1,5 +1,5 @@
 from django import forms
-from recipe_box.models import Author
+from recipe_box.models import Author, Recipe
 
 
 class LoginForm(forms.Form):
@@ -20,3 +20,9 @@ class RecipeAddForm(forms.Form):
     description = forms.CharField(widget=forms.Textarea)
     time_required = forms.CharField(max_length=30)
     instructions = forms.CharField(widget=forms.Textarea)
+
+
+class EditRecipeForm(forms.ModelForm):
+    class Meta:
+        model = Recipe
+        exclude = ['author']
