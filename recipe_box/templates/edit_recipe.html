@@ -1,0 +1,10 @@
+<h1>{{ recipe.title }} | by 
+    <a href={% url 'author_detail' recipe.author.id %}>
+    {{ recipe.author.name }}
+    </a>
+</h1>
+<form action='' method='POST'>
+    {% csrf_token %}
+    {{form.as_p}}
+    <button type='submit'>Save Changes</button>
+</form>
