@@ -41,10 +41,14 @@ def index(request):
 def author(request, id=0):
     author_query = Author.objects.filter(id=id).first()
     recipe_query = Recipe.objects.filter(author=id)
+
+    favorites = author_query.favorites.get_queryset()
+
     return render(request, 'author.html', {
         "author": author_query,
         "recipes": recipe_query,
-        "home": reverse('homepage')
+        "home": reverse('homepage'),
+        'favorites': favorites
     })
 
 
