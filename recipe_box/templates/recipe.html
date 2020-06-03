@@ -21,17 +21,21 @@
     </p>
 {% endfor %}
 
-<a href="{{ home }}">Home</a>
-
 {% if favorite == 'unsaved' %}
-    <a href={% url 'save_recipe' data.id %}>
-        Save as Favorite
-    </a>
+    <form action={% url 'save_recipe' data.id %}>
+        <button type='submit'>
+            Favorite
+        </button>
+    </form>
 {% elif favorite == 'saved' %}
-    <a href={% url 'remove_recipe' data.id %}>
-        Remove as Favorite
-    </a>
+    <form action={% url 'remove_recipe' data.id %}>
+        <button type='submit'>
+            Unfavorite
+        </button>
+    </form>
 {% endif %}
+
+<a href="{{ home }}">Home</a>
 
 {% if editable %}
     <a href={% url 'edit_recipe' data.id %}>
