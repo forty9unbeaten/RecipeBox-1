@@ -2,17 +2,39 @@
     {{data.title}} | by
     <a href="/author/{{data.author.id}}">{{data.author.name}}</a>
 </h1>
-<p>{{data.time_required}}</p>
+<p>
+    {{data.time_required}}
+</p>
 <br />
+
 <h3>Description</h3>
 {% for line in description%}
-<p>{{line}}</p>
+    <p>
+        {{line}}
+    </p>
 {% endfor %}
+
 <h3>Instructions</h3>
 {% for line in instructions %}
-<p>{{line}}</p>
+    <p>
+        {{line}}
+    </p>
 {% endfor %}
+
 <a href="{{ home }}">Home</a>
+
+{% if favorite == 'unsaved' %}
+    <a href={% url 'save_recipe' data.id %}>
+        Save as Favorite
+    </a>
+{% elif favorite == 'saved' %}
+    <a href={% url 'remove_recipe' data.id %}>
+        Remove as Favorite
+    </a>
+{% endif %}
+
 {% if editable %}
-<a href={% url 'edit_recipe' data.id %}>Edit Recipe</a>
+    <a href={% url 'edit_recipe' data.id %}>
+        Edit Recipe
+    </a>
 {% endif %}
