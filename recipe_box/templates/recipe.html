@@ -1,12 +1,18 @@
-<h1>{{data.title}} | by <a href="/author/{{data.author.id}}">{{data.author.name}}</a></h1>
+<h1>
+    {{data.title}} | by
+    <a href="/author/{{data.author.id}}">{{data.author.name}}</a>
+</h1>
 <p>{{data.time_required}}</p>
-<br/>
+<br />
 <h3>Description</h3>
-    {% for line in description%}
-        <p>{{line}}</p>
-    {% endfor %}
+{% for line in description%}
+<p>{{line}}</p>
+{% endfor %}
 <h3>Instructions</h3>
-    {% for line in instructions %}
-        <p>{{line}}</p>
-    {% endfor %}
+{% for line in instructions %}
+<p>{{line}}</p>
+{% endfor %}
 <a href="{{ home }}">Home</a>
+{% if editable %}
+<a href={% url 'edit_recipe' data.id %}>Edit Recipe</a>
+{% endif %}
