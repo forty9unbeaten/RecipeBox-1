@@ -3,7 +3,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from recipe_box.models import Recipe, Author
-from recipe_box.forms import AuthorAddForm, RecipeAddForm, LoginForm
+from recipe_box.forms import AuthorAddForm, RecipeAddForm, LoginForm, EditRecipeForm
 # Create your views here.
 
 
@@ -42,22 +42,31 @@ def author(request, id=0):
     author_query = Author.objects.filter(id=id).first()
     recipe_query = Recipe.objects.filter(author=id)
     return render(request, 'author.html', {
-            "author": author_query,
-            "recipes": recipe_query,
-            "home": reverse('homepage')
-        })
+        "author": author_query,
+        "recipes": recipe_query,
+        "home": reverse('homepage')
+    })
 
 
 def recipe(request, id=0):
     query = Recipe.objects.filter(id=id).first()
     description = query.description.split("\n")
     instructions = query.instructions.split("\n")
+
+    # if user is admin or creator of recipe, they can edit
+    if request.user.is_authenticated and (request.user == query.author
+                                          or request.user.is_staff):
+        editable = True
+    else:
+        editable = False
+
     return render(request, 'recipe.html', {
-            'data': query,
-            "description": description,
-            "instructions": instructions,
-            "home": reverse('homepage')
-        })
+        'data': query,
+        "description": description,
+        "instructions": instructions,
+        "home": reverse('homepage'),
+        'editable': editable
+    })
 
 
 @login_required
@@ -122,3 +131,37 @@ def add_recipe(request):
                 name=request.user.author.name)
         return render(request, html, {
             "form": form, "home": reverse('homepage')})
+
+
+@login_required
+def edit_recipe_view(request, id):
+
+    # POST request handling
+    if request.method == 'POST':
+        form = EditRecipeForm(data=request.POST)
+
+        # validate form entries and save fields to existing database record
+        if form.is_valid():
+            data = form.cleaned_data
+            recipe = Recipe.objects.get(id=id)
+            recipe.title = data['title']
+            recipe.description = data['description']
+            recipe.time_required = data['time_required']
+            recipe.instructions = data['instructions']
+
+            recipe.save()
+
+            return HttpResponseRedirect(
+                reverse('recipe_detail', kwargs={'id': recipe.id})
+            )
+            # GET request handling
+    recipe = Recipe.objects.get(id=id)
+    form = EditRecipeForm(instance=recipe)
+    return render(
+        request,
+        'edit_recipe.html',
+        {
+            'form': form,
+            'recipe': recipe
+        }
+    )
