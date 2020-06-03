@@ -53,19 +53,33 @@ def recipe(request, id=0):
     description = query.description.split("\n")
     instructions = query.instructions.split("\n")
 
-    # if user is admin or creator of recipe, they can edit
-    if request.user.is_authenticated and (request.user == query.author
-                                          or request.user.is_staff):
-        editable = True
+    if request.user.is_authenticated:
+        # user is logged in
+        if request.user.is_staff or request.user == query.author.user:
+            # user is either admin or creating user
+            editable = True
+        else:
+            # user can't edit recipe
+            editable = False
+
+        if query in query.author.favorites.get_queryset():
+            # recipe is already saved as favorite
+            favorite = 'saved'
+        else:
+            # recipe is NOT saved as favorite
+            favorite = 'unsaved'
     else:
+        # user is not logged in
         editable = False
+        favorite = ''
 
     return render(request, 'recipe.html', {
         'data': query,
         "description": description,
         "instructions": instructions,
         "home": reverse('homepage'),
-        'editable': editable
+        'editable': editable,
+        'favorite': favorite
     })
 
 
@@ -164,4 +178,24 @@ def edit_recipe_view(request, id):
             'form': form,
             'recipe': recipe
         }
+    )
+
+
+@login_required
+def favorite_view(request, id):
+    recipe = Recipe.objects.get(id=id)
+    author = recipe.author
+    author.favorites.add(recipe)
+    return HttpResponseRedirect(
+        reverse('recipe_detail', kwargs={'id': id})
+    )
+
+
+@login_required
+def remove_favorite_view(request, id):
+    recipe = Recipe.objects.get(id=id)
+    author = recipe.author
+    author.favorites.remove(recipe)
+    return HttpResponseRedirect(
+        reverse('recipe_detail', kwargs={'id': id})
     )
